@@ -10,34 +10,34 @@ resource "local_file" "jenkins_pipeline_script" {
         stages {
             stage('Checkout') {
                 steps {
-                    git url: 'https://github.com/Rithigasri/carwebsite.git', branch: 'main'
+                    bat 'git clone https://github.com/Rithigasri/carwebsite.git'
                 }
             }
 
             stage('Build') {
                 steps {
                     // Replace with your build commands, e.g., mvn clean install for Maven projects
-                    sh 'echo Building project...'
+                    bat 'echo Building project...'
                 }
             }
 
             stage('Deploy') {
                 steps {
                     // Deployment commands, e.g., copying files to a web server directory
-                    sh 'echo Deploying project...'
+                    bat 'echo Deploying project...'
                 }
             }
 
             stage('Health Check') {
                 steps {
-                    sh '''
-                        STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8080)
-                        if [ "$STATUS" -ne 200 ]; then
-                            echo "Website is down! Status code: $STATUS"
+                    bat '''
+                        FOR /F "tokens=*" %%i IN ('curl -o NUL -s -w "%%{http_code}" http://localhost:8080') DO SET STATUS=%%i
+                        IF NOT "%STATUS%" == "200" (
+                            echo Website is down! Status code: %STATUS%
                             exit 1
-                        else
-                            echo "Website is up and running!"
-                        fi
+                        ) ELSE (
+                            echo Website is up and running!
+                        )
                     '''
                 }
             }
