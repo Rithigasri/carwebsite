@@ -1,5 +1,5 @@
-provider "iis" {
-  version = "~> 1.0"
+provider "local" {
+  
 }
 
 resource "iis_website" "MyStaticSite" {
