@@ -32,3 +32,12 @@ resource "null_resource" "execute_powershell" {
   depends_on = [local_file.deploy_iis]
 }
 
+
+
+module "jenkins" {
+  source = "./modules/jenkins"
+}
+
+module "sonarqube" {
+  source = "./modules/sonarqube"
+}
